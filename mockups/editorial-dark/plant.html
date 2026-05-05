@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apricot — Editorial</title>
+<style>
+  :root {
+    --bg: #14181a;
+    --bg-2: #1d2225;
+    --bg-3: #262c2f;
+    --text: #ece7d8;
+    --text-2: #9aa39c;
+    --text-3: #6b7370;
+    --gold: #c9b88c;
+    --terra: #d97e3a;
+    --leaf: #7ea776;
+    --line: #2a3133;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Inter", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display {
+    font-family: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, serif;
+  }
+  .phone {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--bg);
+    padding-bottom: 80px;
+  }
+  .back {
+    display: inline-block;
+    margin: 18px 18px 0;
+    font-size: 11px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+
+  .hero {
+    margin: 14px 18px 0;
+    border-radius: 4px;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.85)),
+      radial-gradient(circle at 65% 35%, #5a4a2e, #1f1c14),
+      linear-gradient(135deg, #2a2418, #14110b);
+    aspect-ratio: 5 / 6;
+    position: relative;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 22px;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 70% 25%, rgba(217,126,58,0.35) 0%, transparent 35%),
+      radial-gradient(circle at 30% 60%, rgba(126,167,118,0.25) 0%, transparent 50%);
+  }
+  .hero .kicker {
+    position: relative;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .hero h1 {
+    position: relative;
+    font-family: inherit;
+    font-size: 44px;
+    line-height: 1;
+    margin: 0 0 4px;
+    font-weight: 400;
+    letter-spacing: -1px;
+  }
+  .hero .sci {
+    position: relative;
+    font-style: italic;
+    color: var(--text-2);
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+  .hero .meta {
+    position: relative;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(236, 231, 216, 0.7);
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .hero .meta span b { color: var(--gold); font-weight: 400; }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    padding: 18px;
+  }
+  .actions button {
+    flex: 1;
+    padding: 14px;
+    background: var(--bg-2);
+    color: var(--text);
+    border: 1px solid var(--line);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .actions button.primary {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+  }
+
+  .tabs {
+    display: flex;
+    margin: 0 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tab {
+    padding: 10px 14px 10px 0;
+    margin-right: 14px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-3);
+    cursor: pointer;
+  }
+  .tab.active {
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold);
+    margin-bottom: -1px;
+  }
+
+  .row-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin: 28px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .row-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* Phenology — graphical timeline (months as columns) */
+  .pheno {
+    margin: 0 18px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 16px 12px 12px;
+  }
+  .pheno-months {
+    display: grid;
+    grid-template-columns: 36px repeat(12, 1fr);
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-3);
+  }
+  .pheno-months > div { text-align: center; }
+  .pheno-row {
+    display: grid;
+    grid-template-columns: 36px repeat(12, 1fr);
+    align-items: center;
+    height: 22px;
+    margin-bottom: 3px;
+    position: relative;
+  }
+  .pheno-row::after {
+    content: "";
+    position: absolute;
+    left: 36px; right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--line);
+    z-index: 0;
+  }
+  .pheno-row .yr {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 13px;
+    color: var(--text-2);
+    text-align: right;
+    padding-right: 8px;
+    z-index: 1;
+  }
+  .pheno-row.this .yr { color: var(--gold); }
+  .pheno-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin: 0 auto;
+    z-index: 2;
+    position: relative;
+  }
+  .pheno-dot.bud { background: #b0a8d4; }
+  .pheno-dot.bloom { background: #e8a4b6; }
+  .pheno-dot.fruit { background: #e8b876; }
+  .pheno-dot.harvest { background: var(--leaf); }
+  /* Position dots inside their grid cell with slight offset */
+  .legend {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-3);
+    justify-content: center;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 4px; }
+  .legend i {
+    width: 7px; height: 7px; border-radius: 50%; display: inline-block;
+  }
+
+  /* Pull quote */
+  .pullquote {
+    margin: 28px 18px;
+    padding: 22px 18px;
+    border-left: 3px solid var(--gold);
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 20px;
+    line-height: 1.4;
+    color: var(--text);
+    font-style: italic;
+  }
+  .pullquote .attr {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-style: normal;
+  }
+
+  /* Events — magazine list */
+  .event-list { margin: 0 18px; }
+  .event {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .event:last-child { border-bottom: none; }
+  .event .when {
+    font-family: "Iowan Old Style", Georgia, serif;
+  }
+  .event .when .day { font-size: 22px; line-height: 1; color: var(--text); }
+  .event .when .yr { font-size: 11px; color: var(--text-3); margin-top: 4px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .event .body .type {
+    font-size: 10px;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .event .body .desc { color: var(--text-2); }
+  .event .body .desc b { color: var(--text); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <a href="home.html" class="back">← Back</a>
+
+  <div class="hero">
+    <div class="kicker">Front yard · south fence · since '22</div>
+    <h1 class="display">Apricot</h1>
+    <div class="sci">Prunus armeniaca</div>
+    <div class="meta">
+      <span><b>4</b> seasons logged</span>
+      <span><b>47</b> events</span>
+      <span><b>23</b> photos</span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="primary">+ Log event</button>
+    <button>📷 Photo</button>
+    <button>⏰ Remind</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">Timeline</div>
+    <div class="tab">Phenology</div>
+    <div class="tab">Pests</div>
+    <div class="tab">Photos</div>
+  </div>
+
+  <div class="row-label">Phenology · 4 years</div>
+  <div class="pheno">
+    <div class="pheno-months">
+      <div></div>
+      <div>J</div><div>F</div><div>M</div><div>A</div><div>M</div><div>J</div>
+      <div>J</div><div>A</div><div>S</div><div>O</div><div>N</div><div>D</div>
+    </div>
+    <div class="pheno-row this">
+      <div class="yr">'26</div>
+      <div></div><div></div><div></div>
+      <div><div class="pheno-dot bud" title="bud Apr 12"></div></div>
+      <div><div class="pheno-dot bloom" title="bloom Apr 21"></div></div>
+      <div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <div class="pheno-row">
+      <div class="yr">'25</div>
+      <div></div><div></div><div></div>
+      <div><div class="pheno-dot bud" title="bud Apr 9"></div></div>
+      <div><div class="pheno-dot bloom" title="bloom Apr 19"></div></div>
+      <div><div class="pheno-dot fruit" title="fruit set May 6"></div></div>
+      <div><div class="pheno-dot harvest" title="harvest Jul 12"></div></div>
+      <div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <div class="pheno-row">
+      <div class="yr">'24</div>
+      <div></div><div></div><div></div>
+      <div><div class="pheno-dot bud" title="bud Apr 13"></div></div>
+      <div><div class="pheno-dot bloom" title="bloom Apr 22"></div></div>
+      <div><div class="pheno-dot fruit" title="fruit set May 9"></div></div>
+      <div><div class="pheno-dot harvest" title="harvest Jul 15"></div></div>
+      <div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <div class="pheno-row">
+      <div class="yr">'23</div>
+      <div></div><div></div><div></div>
+      <div><div class="pheno-dot bud" title="bud Apr 5"></div></div>
+      <div><div class="pheno-dot bloom" title="bloom Apr 15"></div></div>
+      <div><div class="pheno-dot fruit" title="fruit set Apr 30"></div></div>
+      <div><div class="pheno-dot harvest" title="harvest Jul 8"></div></div>
+      <div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <div class="legend">
+      <span><i style="background: #b0a8d4"></i>Bud</span>
+      <span><i style="background: #e8a4b6"></i>Bloom</span>
+      <span><i style="background: #e8b876"></i>Fruit set</span>
+      <span><i style="background: #7ea776"></i>Harvest</span>
+    </div>
+  </div>
+
+  <div class="pullquote display">
+    "Bees thick this year. About 70% open across the canopy — best bloom since the tree took off."
+    <div class="attr">— Apr 21, 2026 · today</div>
+  </div>
+
+  <div class="row-label">Latest entries</div>
+  <div class="event-list">
+    <div class="event">
+      <div class="when">
+        <div class="day">21</div>
+        <div class="yr">Apr '26</div>
+      </div>
+      <div class="body">
+        <div class="type">Bloom</div>
+        <div class="desc">Full bloom — about 70% open across the canopy. <b>Bees thick this year.</b></div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="when">
+        <div class="day">12</div>
+        <div class="yr">Apr '26</div>
+      </div>
+      <div class="body">
+        <div class="type">Bud</div>
+        <div class="desc">Pink bud stage. Two days behind last year, looks healthy.</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="when">
+        <div class="day">28</div>
+        <div class="yr">Mar '26</div>
+      </div>
+      <div class="body">
+        <div class="type">Prune</div>
+        <div class="desc">Light dormant prune — three crossing branches off. Sealed cuts.</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="when">
+        <div class="day">12</div>
+        <div class="yr">Jul '25</div>
+      </div>
+      <div class="body">
+        <div class="type">Harvest</div>
+        <div class="desc"><b>~14 kg.</b> Heavier than '24 by feel. Made jam (8 jars), dried 2 trays.</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="when">
+        <div class="day">30</div>
+        <div class="yr">May '25</div>
+      </div>
+      <div class="body">
+        <div class="type">Pest · aphids</div>
+        <div class="desc">Moderate pressure on new growth. Sprayed soap; cleared in a week.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

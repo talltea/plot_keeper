@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apricot — Almanac</title>
+<style>
+  :root {
+    --bg: #f4f3ee;
+    --paper: #fbfaf5;
+    --ink: #1a1a1a;
+    --ink-2: #4a4a44;
+    --ink-3: #8b8b82;
+    --rule: #c9c5b6;
+    --rule-2: #e0ddcf;
+    --olive: #6b8e23;
+    --rust: #a04a28;
+    --maroon: #6b2c2c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .serif { font-family: "Iowan Old Style", "Charter", Georgia, serif; }
+  .phone {
+    max-width: 420px;
+    margin: 0 auto;
+    background: var(--paper);
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+  .back {
+    display: block;
+    padding: 10px 12px 4px;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+
+  /* Plant masthead */
+  .pmast {
+    border-top: 3px double var(--ink);
+    border-bottom: 3px double var(--ink);
+    padding: 14px 12px;
+    text-align: center;
+    background: var(--paper);
+  }
+  .pmast .em-row {
+    font-size: 36px;
+    margin-bottom: 4px;
+    line-height: 1;
+  }
+  .pmast h1 {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 30px;
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+  .pmast .sci {
+    font-style: italic;
+    color: var(--ink-2);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  .pmast .specs {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-top: 1px solid var(--rule);
+    padding-top: 8px;
+    flex-wrap: wrap;
+  }
+  .pmast .specs b { color: var(--ink); font-family: "Iowan Old Style", Georgia, serif; font-weight: 400; }
+
+  /* Tabs */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--ink);
+  }
+  .tab {
+    padding: 10px 4px;
+    text-align: center;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-3);
+    border-right: 1px solid var(--rule);
+    cursor: pointer;
+  }
+  .tab:last-child { border-right: none; }
+  .tab.active { background: var(--ink); color: var(--paper); }
+
+  /* Action row */
+  .actions {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    border-bottom: 1px solid var(--rule);
+  }
+  .actions button {
+    padding: 12px 8px;
+    border: none;
+    border-right: 1px solid var(--rule);
+    background: var(--paper);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .actions button:last-child { border-right: none; }
+  .actions button.primary {
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 600;
+  }
+
+  /* Section */
+  h2 {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 6px 12px 4px;
+    border-bottom: 1px solid var(--ink);
+    background: var(--bg);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  h2 .right {
+    float: right;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  section { margin-bottom: 8px; }
+
+  /* Phenology — the centerpiece */
+  table.pheno {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    font-feature-settings: "tnum";
+  }
+  table.pheno th, table.pheno td {
+    padding: 7px 6px;
+    text-align: center;
+    border-bottom: 1px solid var(--rule);
+    border-right: 1px dotted var(--rule-2);
+  }
+  table.pheno th:last-child, table.pheno td:last-child { border-right: none; }
+  table.pheno th {
+    background: var(--bg);
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-weight: 400;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-2);
+    border-bottom: 2px solid var(--ink);
+  }
+  table.pheno .yr {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--bg);
+    text-align: left;
+    padding-left: 12px;
+    width: 56px;
+  }
+  table.pheno tr.this .yr { color: var(--rust); font-weight: 600; }
+  table.pheno tr.median { background: rgba(0,0,0,0.03); }
+  table.pheno tr.median .yr {
+    font-style: italic;
+    color: var(--ink-3);
+    font-size: 12px;
+  }
+  table.pheno td.empty { color: var(--ink-3); }
+  table.pheno .delta { font-size: 10px; color: var(--rust); display: block; }
+  table.pheno .delta.early { color: var(--olive); }
+
+  /* Pest summary */
+  .pest-strip {
+    padding: 8px 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border-bottom: 1px solid var(--rule);
+    font-size: 11px;
+  }
+  .pest-strip > div { background: var(--paper); padding: 6px 8px; }
+  .pest-strip .num {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 18px;
+    color: var(--maroon);
+  }
+  .pest-strip .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-3); }
+
+  /* Events table */
+  table.events {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    font-feature-settings: "tnum";
+  }
+  table.events th {
+    background: var(--bg);
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-weight: 400;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-3);
+    text-align: left;
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--ink);
+  }
+  table.events td {
+    padding: 7px 8px;
+    vertical-align: top;
+    border-bottom: 1px dotted var(--rule);
+  }
+  table.events tr:last-child td { border-bottom: none; }
+  table.events td.date {
+    color: var(--ink-2);
+    white-space: nowrap;
+    width: 70px;
+  }
+  table.events td.type {
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    background: var(--bg);
+    width: 70px;
+  }
+  table.events td.type.bloom { background: #fce8ee; }
+  table.events td.type.bud { background: #ece4f5; }
+  table.events td.type.harvest { background: #e8f1e6; }
+  table.events td.type.pest { background: #fde2d8; }
+  table.events td.type.prune { background: #fff0d6; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <a class="back" href="home.html">← TODAY</a>
+
+  <div class="pmast">
+    <div class="em-row">🌳</div>
+    <h1 class="serif">Apricot</h1>
+    <div class="sci">Prunus armeniaca</div>
+    <div class="specs">
+      <span>Mode: <b>individual</b></span>
+      <span>Planted: <b>Mar 2022</b></span>
+      <span>Loc: <b>front · S fence</b></span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="primary">+ Log event</button>
+    <button>Photo</button>
+    <button>Remind</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">Timeline</div>
+    <div class="tab">Phenology</div>
+    <div class="tab">Pests</div>
+    <div class="tab">Photos</div>
+  </div>
+
+  <section>
+    <h2>Phenology table <span class="right">4 yr · 47 events</span></h2>
+    <table class="pheno">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>bud</th>
+          <th>bloom</th>
+          <th>fruit&nbsp;set</th>
+          <th>harvest</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="this">
+          <td class="yr">2026</td>
+          <td>Apr 12</td>
+          <td>Apr 21<span class="delta">+2 d</span></td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+        </tr>
+        <tr>
+          <td class="yr">2025</td>
+          <td>Apr 9</td>
+          <td>Apr 19</td>
+          <td>May 6</td>
+          <td>Jul 12</td>
+        </tr>
+        <tr>
+          <td class="yr">2024</td>
+          <td>Apr 13</td>
+          <td>Apr 22</td>
+          <td>May 9</td>
+          <td>Jul 15</td>
+        </tr>
+        <tr>
+          <td class="yr">2023</td>
+          <td>Apr 5</td>
+          <td>Apr 15</td>
+          <td>Apr 30</td>
+          <td>Jul 8</td>
+        </tr>
+        <tr class="median">
+          <td class="yr">median</td>
+          <td>Apr 9</td>
+          <td>Apr 19</td>
+          <td>May 6</td>
+          <td>Jul 12</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Pest record <span class="right">past 4 yr</span></h2>
+    <div class="pest-strip">
+      <div>
+        <div class="lbl">Aphids</div>
+        <div class="num">3</div>
+      </div>
+      <div>
+        <div class="lbl">Curl</div>
+        <div class="num">2</div>
+      </div>
+      <div>
+        <div class="lbl">Brown rot</div>
+        <div class="num">1</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Recent events <span class="right">latest 5</span></h2>
+    <table class="events">
+      <thead>
+        <tr><th>Date</th><th>Type</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="date">Apr 21<br><small style="color:var(--ink-3)">2026</small></td>
+          <td class="type bloom">bloom</td>
+          <td>Full bloom — about 70% open. Bees thick this year.</td>
+        </tr>
+        <tr>
+          <td class="date">Apr 12<br><small style="color:var(--ink-3)">2026</small></td>
+          <td class="type bud">bud</td>
+          <td>Pink bud stage. Two days behind last year.</td>
+        </tr>
+        <tr>
+          <td class="date">Mar 28<br><small style="color:var(--ink-3)">2026</small></td>
+          <td class="type prune">prune</td>
+          <td>Light dormant prune — three crossing branches off. Sealed cuts.</td>
+        </tr>
+        <tr>
+          <td class="date">Jul 12<br><small style="color:var(--ink-3)">2025</small></td>
+          <td class="type harvest">harvest</td>
+          <td>~14 kg. Heavier than '24. Made jam (8 jars), dried 2 trays.</td>
+        </tr>
+        <tr>
+          <td class="date">May 30<br><small style="color:var(--ink-3)">2025</small></td>
+          <td class="type pest">pest</td>
+          <td>Aphids · moderate. Sprayed soap; cleared in a week.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+</body>
+</html>

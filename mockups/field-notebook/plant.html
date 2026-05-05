@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apricot — The Garden Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3ecd9;
+    --ink: #2a2017;
+    --ink-2: #5b4a32;
+    --ink-3: #8a7a5d;
+    --rule: #b8a37e;
+    --sage: #4a6741;
+    --rust: #8a3a1c;
+    --gilt: #a07b2c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "EB Garamond", "Iowan Old Style", Charter, Georgia, serif;
+    font-size: 17px;
+    line-height: 1.55;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.30;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0 0.30 0 0 0 0.13 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: inset 0 0 60px rgba(120, 85, 35, 0.13);
+  }
+  .phone {
+    position: relative;
+    z-index: 2;
+    max-width: 440px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 0 22px 40px;
+  }
+
+  .back {
+    display: inline-block;
+    padding: 14px 0 6px;
+    font-family: "IM Fell English SC", serif;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  .back::before { content: "← "; }
+
+  /* ─── NAMEPLATE ───────────────────────────────────────────────── */
+  .nameplate {
+    text-align: center;
+    border-top: 3px double var(--ink);
+    border-bottom: 3px double var(--ink);
+    padding: 22px 14px 16px;
+    margin-bottom: 14px;
+  }
+  .nameplate h1 {
+    font-family: "IM Fell DW Pica", "EB Garamond", serif;
+    font-style: italic;
+    font-size: 38px;
+    line-height: 0.95;
+    margin: 0 0 4px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  .nameplate .latin {
+    font-style: italic;
+    color: var(--rust);
+    font-size: 16px;
+  }
+  .nameplate .ornament {
+    color: var(--gilt);
+    margin-top: 8px;
+    letter-spacing: 12px;
+    padding-left: 12px;
+    font-size: 13px;
+  }
+  .nameplate .meta {
+    margin-top: 10px;
+    border-top: 1px solid var(--rule);
+    padding-top: 8px;
+    font-family: "IM Fell English SC", serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-2);
+  }
+  .nameplate .meta b { color: var(--ink); font-weight: 400; font-family: "EB Garamond", serif; font-style: italic; letter-spacing: 0; font-size: 13px; }
+
+  /* ─── ACTIONS ─────────────────────────────────────────────────── */
+  .stamps {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .stamps button {
+    font-family: "IM Fell English SC", serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 10px 6px;
+    background: rgba(255,255,255,0.18);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    cursor: pointer;
+  }
+  .stamps button.primary {
+    background: var(--ink);
+    color: var(--paper);
+    border: 3px double var(--ink);
+  }
+
+  /* ─── TABS ────────────────────────────────────────────────────── */
+  .tabs {
+    display: flex;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.18);
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    font-family: "IM Fell English SC", serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-3);
+    cursor: pointer;
+    border-right: 1px solid var(--rule);
+  }
+  .tab:last-child { border-right: none; }
+  .tab.active { color: var(--ink); background: var(--paper); border-bottom: 2px solid var(--gilt); }
+
+  /* ─── SECTION HEADERS ─────────────────────────────────────────── */
+  h2 {
+    font-family: "IM Fell English SC", serif;
+    font-size: 14px;
+    margin: 22px 0 10px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    text-align: center;
+  }
+  h2 .sub {
+    display: block;
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0;
+    color: var(--ink-2);
+    margin-top: -2px;
+  }
+
+  /* ─── PHENOLOGY TABLE ─────────────────────────────────────────── */
+  .pheno-wrap {
+    border: 1px solid var(--ink);
+    padding: 8px;
+    background: rgba(255,255,255,0.18);
+  }
+  table.pheno {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-feature-settings: "tnum" 1;
+  }
+  table.pheno th {
+    font-family: "IM Fell English SC", serif;
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--ink-2);
+    padding: 6px 4px;
+    text-align: center;
+    border-bottom: 2px solid var(--ink);
+  }
+  table.pheno th:first-child { text-align: left; padding-left: 8px; }
+  table.pheno td {
+    padding: 8px 4px;
+    text-align: center;
+    border-bottom: 1px dotted var(--rule);
+  }
+  table.pheno tr:last-child td { border-bottom: none; }
+  table.pheno td:first-child {
+    text-align: left;
+    padding-left: 8px;
+    font-family: "EB Garamond", serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--ink-2);
+  }
+  table.pheno tr.this td:first-child { color: var(--rust); font-style: normal; font-weight: 600; }
+  table.pheno td.empty { color: var(--ink-3); }
+  table.pheno tr.median { border-top: 1px solid var(--ink); }
+  table.pheno tr.median td {
+    color: var(--ink-2);
+    font-style: italic;
+    background: rgba(160,123,44,0.05);
+  }
+  table.pheno tr.median td:first-child {
+    font-family: "IM Fell English SC", serif;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--ink-3);
+  }
+  .pheno .delta {
+    display: block;
+    font-size: 10px;
+    color: var(--rust);
+    font-style: italic;
+  }
+
+  /* ─── ENTRIES with marginalia ─────────────────────────────────── */
+  .entry {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px dotted var(--rule);
+    align-items: start;
+  }
+  .entry:last-child { border-bottom: none; }
+  .entry .marg {
+    text-align: right;
+    border-right: 1px solid var(--rule);
+    padding-right: 12px;
+    color: var(--ink-2);
+  }
+  .entry .marg .day {
+    font-family: "IM Fell DW Pica", serif;
+    font-style: italic;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--rust);
+    font-feature-settings: "tnum" 1;
+  }
+  .entry .marg .mo {
+    font-family: "IM Fell English SC", serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-top: 2px;
+    color: var(--ink-3);
+  }
+  .entry .marg .no {
+    margin-top: 8px;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .entry .body { font-size: 15px; }
+  .entry .body .type {
+    font-family: "IM Fell English SC", serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gilt);
+    margin-bottom: 4px;
+  }
+  .entry .body p { margin: 0; }
+  .entry .body p b { font-weight: 600; }
+  /* Drop cap on first entry */
+  .entry:first-of-type .body p::first-letter {
+    font-family: "IM Fell DW Pica", serif;
+    font-style: italic;
+    font-size: 36px;
+    float: left;
+    line-height: 0.9;
+    padding: 4px 6px 0 0;
+    color: var(--rust);
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <a class="back" href="home.html">back to today</a>
+
+  <header class="nameplate">
+    <h1>Apricot</h1>
+    <div class="latin">Prunus armeniaca</div>
+    <div class="ornament">❦ ❀ ❦</div>
+    <div class="meta">
+      individual · planted <b>March 2022</b> · front yard, south fence
+    </div>
+  </header>
+
+  <div class="stamps">
+    <button class="primary">＋ Log event</button>
+    <button>Photo</button>
+    <button>Remind</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">Timeline</div>
+    <div class="tab">Phenology</div>
+    <div class="tab">Pests</div>
+    <div class="tab">Photos</div>
+  </div>
+
+  <h2>Phenology
+    <span class="sub">recurrent events, year over year</span>
+  </h2>
+
+  <div class="pheno-wrap">
+    <table class="pheno">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>bud</th>
+          <th>bloom</th>
+          <th>fruit set</th>
+          <th>harvest</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="this">
+          <td>2026</td>
+          <td>Apr 12</td>
+          <td>Apr 21<span class="delta">+2 d</span></td>
+          <td class="empty">—</td>
+          <td class="empty">—</td>
+        </tr>
+        <tr>
+          <td>2025</td>
+          <td>Apr 9</td>
+          <td>Apr 19</td>
+          <td>May 6</td>
+          <td>Jul 12</td>
+        </tr>
+        <tr>
+          <td>2024</td>
+          <td>Apr 13</td>
+          <td>Apr 22</td>
+          <td>May 9</td>
+          <td>Jul 15</td>
+        </tr>
+        <tr>
+          <td>2023</td>
+          <td>Apr 5</td>
+          <td>Apr 15</td>
+          <td>Apr 30</td>
+          <td>Jul 8</td>
+        </tr>
+        <tr class="median">
+          <td>median</td>
+          <td>Apr 9</td>
+          <td>Apr 19</td>
+          <td>May 6</td>
+          <td>Jul 12</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Recent entries
+    <span class="sub">latest first</span>
+  </h2>
+
+  <article class="entry">
+    <div class="marg">
+      <div class="day">21</div>
+      <div class="mo">APR 2026</div>
+      <div class="no">no. 47</div>
+    </div>
+    <div class="body">
+      <div class="type">BLOOM</div>
+      <p>Full bloom — about 70% open across the canopy. <b>Bees thick this year</b>, best showing since the tree took off.</p>
+    </div>
+  </article>
+
+  <article class="entry">
+    <div class="marg">
+      <div class="day">12</div>
+      <div class="mo">APR 2026</div>
+      <div class="no">no. 46</div>
+    </div>
+    <div class="body">
+      <div class="type">BUD</div>
+      <p>Pink bud stage. Two days behind last year, looks healthy.</p>
+    </div>
+  </article>
+
+  <article class="entry">
+    <div class="marg">
+      <div class="day">28</div>
+      <div class="mo">MAR 2026</div>
+      <div class="no">no. 45</div>
+    </div>
+    <div class="body">
+      <div class="type">PRUNE</div>
+      <p>Light dormant prune — three crossing branches off. Sealed cuts.</p>
+    </div>
+  </article>
+
+  <article class="entry">
+    <div class="marg">
+      <div class="day">12</div>
+      <div class="mo">JUL 2025</div>
+      <div class="no">no. 38</div>
+    </div>
+    <div class="body">
+      <div class="type">HARVEST</div>
+      <p><b>~14 kg</b>. Heavier than '24. Made jam (8 jars), dried 2 trays.</p>
+    </div>
+  </article>
+
+  <article class="entry">
+    <div class="marg">
+      <div class="day">30</div>
+      <div class="mo">MAY 2025</div>
+      <div class="no">no. 31</div>
+    </div>
+    <div class="body">
+      <div class="type">PEST · APHIDS</div>
+      <p>Moderate pressure on new growth. Sprayed soap; cleared in a week.</p>
+    </div>
+  </article>
+
+</div>
+</body>
+</html>

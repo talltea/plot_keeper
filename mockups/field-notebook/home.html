@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Garden Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English+SC&family=IM+Fell+DW+Pica:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3ecd9;
+    --paper-2: #ece2c7;
+    --ink: #2a2017;
+    --ink-2: #5b4a32;
+    --ink-3: #8a7a5d;
+    --rule: #b8a37e;
+    --sage: #4a6741;
+    --rust: #8a3a1c;
+    --gilt: #a07b2c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "EB Garamond", "Iowan Old Style", "Charter", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.55;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+  /* Subtle paper grain */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.30;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0 0.30 0 0 0 0.13 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  /* Gentle edge */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: inset 0 0 60px rgba(120, 85, 35, 0.13);
+  }
+  .phone {
+    position: relative;
+    z-index: 2;
+    max-width: 440px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 0 22px 80px;
+  }
+
+  /* ─── MASTHEAD ────────────────────────────────────────────────── */
+  .mast {
+    text-align: center;
+    padding: 14px 0 10px;
+    border-bottom: 3px double var(--ink);
+  }
+  .mast .title {
+    font-family: "IM Fell DW Pica", "EB Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: 28px;
+    line-height: 1;
+    margin: 0 0 4px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  .mast .title em {
+    color: var(--rust);
+    font-style: italic;
+  }
+  .mast .date {
+    font-family: "IM Fell English SC", serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--ink-2);
+  }
+  .mast .date b { color: var(--ink); font-weight: 400; }
+  .mast .date .gilt { color: var(--gilt); margin: 0 6px; letter-spacing: 0; }
+
+  /* ─── SECTION HEADERS ─────────────────────────────────────────── */
+  h2 {
+    font-family: "IM Fell English SC", serif;
+    font-size: 14px;
+    margin: 18px 0 10px;
+    letter-spacing: 2px;
+    color: var(--ink);
+    font-weight: 400;
+    text-align: center;
+  }
+  h2:first-of-type { margin-top: 14px; }
+  h2 .sub {
+    display: block;
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0;
+    color: var(--ink-2);
+    margin-top: -2px;
+  }
+
+  /* ─── FROST BANNER ────────────────────────────────────────────── */
+  .frost {
+    text-align: center;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 8px 14px;
+    margin: 14px 0 0;
+    font-style: italic;
+    color: var(--ink-2);
+    font-size: 14px;
+    background: rgba(255,255,255,0.18);
+  }
+  .frost b { font-style: normal; color: var(--sage); }
+
+  /* ─── WEATHER LEDGER ──────────────────────────────────────────── */
+  .ledger {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-feature-settings: "tnum" 1;
+  }
+  .ledger th {
+    font-family: "IM Fell English SC", serif;
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-3);
+    text-align: left;
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .ledger th.num, .ledger td.num { text-align: right; }
+  .ledger td {
+    padding: 7px 6px;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .ledger tr:last-child td { border-bottom: none; }
+  .ledger .em { font-style: italic; color: var(--ink-2); font-size: 13px; }
+  .ledger .fcst td:first-child { color: var(--rust); font-style: italic; }
+
+  /* ─── ON THIS DAY ─────────────────────────────────────────────── */
+  .memoir {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .memoir li {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dotted var(--rule);
+    align-items: baseline;
+  }
+  .memoir li:last-child { border-bottom: none; }
+  .memoir .when {
+    font-family: "IM Fell English SC", serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--ink-3);
+    line-height: 1.3;
+  }
+  .memoir .when b {
+    display: block;
+    font-family: "EB Garamond", serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--rust);
+    letter-spacing: 0;
+    font-feature-settings: "tnum" 1;
+  }
+  .memoir .what { font-size: 15px; }
+  .memoir .what b { font-style: italic; font-weight: 600; }
+  .memoir .what .quote {
+    display: block;
+    font-style: italic;
+    color: var(--ink-2);
+    font-size: 13px;
+    margin-top: 2px;
+  }
+  /* Drop cap on first */
+  .memoir li:first-child .what::first-letter {
+    font-family: "IM Fell DW Pica", serif;
+    font-style: italic;
+    font-size: 36px;
+    float: left;
+    line-height: 0.9;
+    padding: 4px 6px 0 0;
+    color: var(--rust);
+  }
+
+  /* ─── SUBJECTS / QUICK CAPTURE GRID ────────────────────────────── */
+  .subjects {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .subj {
+    border: 1px solid var(--ink);
+    background: rgba(255,255,255,0.18);
+    padding: 10px 6px;
+    text-align: center;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+    aspect-ratio: 1.3 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .subj .em { font-size: 26px; line-height: 1; }
+  .subj .name {
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.15;
+  }
+  .subj.new {
+    background: var(--ink);
+    color: var(--paper);
+    border: 3px double var(--ink);
+  }
+  .subj.new .em { font-size: 24px; }
+  .subj.new .name { font-style: normal; font-family: "IM Fell English SC", serif; letter-spacing: 2px; font-size: 11px; }
+
+  /* ─── MEMORANDA ───────────────────────────────────────────────── */
+  .memo {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .memo li {
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    gap: 8px;
+    padding: 9px 0;
+    border-bottom: 1px dotted var(--rule);
+    align-items: baseline;
+    font-size: 15px;
+  }
+  .memo li:last-child { border-bottom: none; }
+  .memo .mark {
+    font-family: "IM Fell DW Pica", serif;
+    font-style: italic;
+    color: var(--ink-3);
+    text-align: right;
+  }
+  .memo .when {
+    font-family: "IM Fell English SC", serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--ink-3);
+  }
+  .memo li.late .when, .memo li.late .mark { color: var(--rust); }
+
+  /* ─── BOTTOM NAV ──────────────────────────────────────────────── */
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--paper);
+    border-top: 3px double var(--ink);
+    padding: 10px 0 18px;
+    display: flex;
+    justify-content: space-around;
+    max-width: 440px;
+    margin: 0 auto;
+    z-index: 5;
+  }
+  .nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0 0.30 0 0 0 0.13 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: 0.30;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+  .nav a {
+    position: relative;
+    text-decoration: none;
+    color: var(--ink-2);
+    font-family: "IM Fell English SC", serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+  .nav a.active {
+    color: var(--ink);
+    border-bottom: 1px solid var(--gilt);
+    padding-bottom: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <header class="mast">
+    <h1 class="title">The <em>Garden</em> Book</h1>
+    <div class="date">Tuesday <span class="gilt">❦</span> <b>5 May 2026</b></div>
+  </header>
+
+  <h2>Subjects
+    <span class="sub">tap to log an event</span>
+  </h2>
+  <div class="subjects">
+    <button class="subj new">
+      <span class="em">＋</span>
+      <span class="name">New entry</span>
+    </button>
+    <button class="subj">
+      <span class="em">🌳</span>
+      <span class="name">Apricot</span>
+    </button>
+    <button class="subj">
+      <span class="em">🍅</span>
+      <span class="name">Sungold</span>
+    </button>
+    <button class="subj">
+      <span class="em">🌿</span>
+      <span class="name">Basil</span>
+    </button>
+    <button class="subj">
+      <span class="em">🫐</span>
+      <span class="name">Patriot</span>
+    </button>
+    <button class="subj">
+      <span class="em">🥕</span>
+      <span class="name">Carrots</span>
+    </button>
+  </div>
+
+  <div class="frost">
+    No frost expected through Friday. Lows hold above <b>8°C</b>.
+  </div>
+
+  <h2>Rain
+    <span class="sub">past two weeks &amp; the next ten days</span>
+  </h2>
+  <table class="ledger">
+    <tr>
+      <th>Date</th>
+      <th>Notes</th>
+      <th class="num">mm</th>
+    </tr>
+    <tr>
+      <td>Apr 30</td>
+      <td><span class="em">last rain · 6 days ago</span></td>
+      <td class="num">8.0</td>
+    </tr>
+    <tr>
+      <td>Apr 22</td>
+      <td><span class="em">light shower</span></td>
+      <td class="num">3.5</td>
+    </tr>
+    <tr class="fcst">
+      <td>May 7</td>
+      <td><span class="em">forecast — in 2 days</span></td>
+      <td class="num">12.0</td>
+    </tr>
+    <tr class="fcst">
+      <td>May 12</td>
+      <td><span class="em">forecast — passing</span></td>
+      <td class="num">2.5</td>
+    </tr>
+  </table>
+
+  <h2>On this day, last year
+    <span class="sub">entries from prior years, ±5 days</span>
+  </h2>
+  <ul class="memoir">
+    <li>
+      <div class="when">May 6<b>2025</b></div>
+      <div class="what"><b>Apricot</b> — first fruit set noted, heavier than '24.
+        <span class="quote">"second cluster looking generous on the south side"</span>
+      </div>
+    </li>
+    <li>
+      <div class="when">May 4<b>2025</b></div>
+      <div class="what"><b>Sungold</b> — planted four seedlings at A1, A2.</div>
+    </li>
+    <li>
+      <div class="when">May 8<b>2024</b></div>
+      <div class="what"><b>Veg bed</b> — mulched with three barrows of straw.</div>
+    </li>
+    <li>
+      <div class="when">May 3<b>2024</b></div>
+      <div class="what"><b>Basil</b> — sown six cells at B3, B4.</div>
+    </li>
+  </ul>
+
+  <h2>Memoranda
+    <span class="sub">things presently to be done</span>
+  </h2>
+  <ul class="memo">
+    <li class="late">
+      <span class="mark">✶</span>
+      <span>Check apricot for peach-leaf-curl.</span>
+      <span class="when">3 DAYS LATE</span>
+    </li>
+    <li>
+      <span class="mark">·</span>
+      <span>Side-dress the tomatoes with compost tea.</span>
+      <span class="when">TOMORROW</span>
+    </li>
+    <li>
+      <span class="mark">·</span>
+      <span>Direct sow the second succession of carrots.</span>
+      <span class="when">IN 4 DAYS</span>
+    </li>
+  </ul>
+
+</div>
+
+<nav class="nav">
+  <a class="active">Today</a>
+  <a>Plants</a>
+  <a>Beds</a>
+  <a href="plant.html">Journal</a>
+  <a>Plan</a>
+</nav>
+</body>
+</html>

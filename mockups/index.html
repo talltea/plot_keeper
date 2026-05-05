@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plot Keeper — UI Mockups</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #1a1a1a;
+    color: #e8e6df;
+    font-family: -apple-system, "Inter", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  header {
+    text-align: center;
+    padding: 36px 20px 8px;
+  }
+  header h1 {
+    margin: 0;
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+  }
+  header p {
+    color: #9a978d;
+    max-width: 640px;
+    margin: 8px auto 0;
+  }
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin: 22px 0 14px;
+    flex-wrap: wrap;
+  }
+  .tabs button {
+    background: #2a2a2a;
+    color: #c9c5b6;
+    border: 1px solid #3a3a3a;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 0;
+  }
+  .tabs button.active {
+    background: #c9b88c;
+    color: #1a1a1a;
+    border-color: #c9b88c;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 24px;
+    padding: 14px 24px 60px;
+    max-width: 1900px;
+    margin: 0 auto;
+  }
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .col h2 {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-weight: 400;
+    font-size: 22px;
+    margin: 0 0 4px;
+  }
+  .col .blurb {
+    text-align: center;
+    color: #9a978d;
+    font-size: 12px;
+    margin-bottom: 14px;
+    max-width: 360px;
+    min-height: 36px;
+  }
+  .frame {
+    width: 420px;
+    height: 760px;
+    border: 1px solid #3a3a3a;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  .frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  .col .links {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #9a978d;
+  }
+  .col .links a {
+    color: #c9b88c;
+    text-decoration: none;
+    margin: 0 6px;
+  }
+  .col .links a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Plot Keeper — UI directions</h1>
+  <p>Four visual approaches for the same app. Same data, same screens — different feel.<br>
+  Toggle between Home and Plant detail to compare across approaches.</p>
+  <div class="tabs">
+    <button class="active" data-screen="home">Home</button>
+    <button data-screen="plant">Plant detail (Apricot)</button>
+  </div>
+</header>
+
+<div class="grid">
+
+  <div class="col">
+    <h2>1 · Field notebook</h2>
+    <div class="blurb">Warm parchment, serif headings, ledger-style ruled tables. Reads like a hand-kept garden journal.</div>
+    <div class="frame"><iframe data-base="field-notebook" src="field-notebook/home.html"></iframe></div>
+    <div class="links">
+      <a href="field-notebook/home.html" target="_blank">Open home ↗</a>·
+      <a href="field-notebook/plant.html" target="_blank">Open plant ↗</a>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2>2 · Soft mobile</h2>
+    <div class="blurb">Modern iOS-native feel: rounded cards, generous whitespace, sage accents, pastel event chips. Phone-first.</div>
+    <div class="frame"><iframe data-base="soft-mobile" src="soft-mobile/home.html"></iframe></div>
+    <div class="links">
+      <a href="soft-mobile/home.html" target="_blank">Open home ↗</a>·
+      <a href="soft-mobile/plant.html" target="_blank">Open plant ↗</a>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2>3 · Editorial dark</h2>
+    <div class="blurb">Magazine layout, dark theme, gold accents. Photos lead, "this week last year" is the hero. Moody.</div>
+    <div class="frame"><iframe data-base="editorial-dark" src="editorial-dark/home.html"></iframe></div>
+    <div class="links">
+      <a href="editorial-dark/home.html" target="_blank">Open home ↗</a>·
+      <a href="editorial-dark/plant.html" target="_blank">Open plant ↗</a>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2>4 · Almanac dense</h2>
+    <div class="blurb">Calendar/printout aesthetic. Mono + serif, double-rule borders, info-rich tables. Data-forward.</div>
+    <div class="frame"><iframe data-base="almanac-dense" src="almanac-dense/home.html"></iframe></div>
+    <div class="links">
+      <a href="almanac-dense/home.html" target="_blank">Open home ↗</a>·
+      <a href="almanac-dense/plant.html" target="_blank">Open plant ↗</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const buttons = document.querySelectorAll('.tabs button');
+  const iframes = document.querySelectorAll('iframe[data-base]');
+  buttons.forEach(b => {
+    b.addEventListener('click', () => {
+      buttons.forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      const screen = b.dataset.screen;
+      iframes.forEach(f => {
+        f.src = f.dataset.base + '/' + screen + '.html';
+      });
+    });
+  });
+</script>
+</body>
+</html>

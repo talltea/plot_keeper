@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plot Keeper — Editorial</title>
+<style>
+  :root {
+    --bg: #14181a;
+    --bg-2: #1d2225;
+    --bg-3: #262c2f;
+    --text: #ece7d8;
+    --text-2: #9aa39c;
+    --text-3: #6b7370;
+    --gold: #c9b88c;
+    --terra: #d97e3a;
+    --leaf: #7ea776;
+    --line: #2a3133;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Inter", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display {
+    font-family: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, serif;
+  }
+  .phone {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--bg);
+    padding-bottom: 80px;
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 18px 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-3);
+  }
+  .topbar .brand { color: var(--gold); }
+  /* Hero with photo */
+  .hero {
+    margin: 4px 18px 18px;
+    border-radius: 4px;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.85)),
+      radial-gradient(circle at 30% 30%, #4a5a3e, #20251f),
+      linear-gradient(135deg, #2d3a30, #1a1f1a);
+    aspect-ratio: 4 / 5;
+    position: relative;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 22px;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 70% 25%, rgba(126,167,118,0.4) 0%, transparent 40%),
+      radial-gradient(circle at 25% 70%, rgba(217,126,58,0.25) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero .kicker {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .hero h1 {
+    font-family: inherit;
+    font-size: 36px;
+    line-height: 1.1;
+    margin: 0 0 14px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    position: relative;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero .meta {
+    font-size: 13px;
+    color: rgba(236, 231, 216, 0.75);
+    position: relative;
+  }
+
+  .wrap { padding: 0 18px; }
+
+  .row-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin: 28px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .row-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* Weather strip */
+  .weather {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .weather > div {
+    background: var(--bg-2);
+    padding: 14px;
+  }
+  .weather .label {
+    font-size: 10px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .weather .val {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 22px;
+    color: var(--text);
+  }
+  .weather .sub {
+    font-size: 11px;
+    color: var(--text-2);
+    margin-top: 4px;
+  }
+
+  /* Quick capture as horizontal scroll */
+  .qc-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin: 0 -18px;
+    padding: 4px 18px;
+  }
+  .qc {
+    flex: 0 0 120px;
+    height: 120px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .qc:hover { border-color: var(--gold); }
+  .qc .em { font-size: 28px; }
+  .qc .name {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 16px;
+    color: var(--text);
+  }
+  .qc .sub {
+    font-size: 10px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .qc.primary {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+  }
+  .qc.primary .name, .qc.primary .sub { color: var(--bg); }
+
+  /* Memory section — magazine style */
+  .memory {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .memory:last-child { border-bottom: none; }
+  .memory .yr {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 28px;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .memory .day {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-3);
+    margin-top: 4px;
+  }
+  .memory .body .title {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .memory .body .desc {
+    font-size: 13px;
+    color: var(--text-2);
+    font-style: italic;
+  }
+
+  /* Reminders */
+  .reminders {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    margin-top: 6px;
+  }
+  .reminder {
+    padding: 14px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .reminder:last-child { border-bottom: none; }
+  .reminder .title { font-size: 14px; }
+  .reminder .when {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-3);
+    flex-shrink: 0;
+  }
+  .reminder.overdue { background: rgba(217,126,58,0.06); }
+  .reminder.overdue .when { color: var(--terra); }
+
+  /* Frost — calm */
+  .frost {
+    background: var(--bg-2);
+    border-left: 3px solid var(--leaf);
+    padding: 10px 14px;
+    margin: 0 18px 18px;
+    font-size: 12px;
+    color: var(--text-2);
+  }
+
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(20, 24, 26, 0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+    padding: 12px 0 22px;
+    display: flex;
+    justify-content: space-around;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .nav a {
+    color: var(--text-3);
+    text-decoration: none;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .nav a.active { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="topbar">
+    <span class="brand">PLOT&nbsp;KEEPER</span>
+    <span>Tue · 5 May · 2026</span>
+  </div>
+
+  <div class="hero">
+    <div class="kicker">This week, last year</div>
+    <h1 class="display">The apricot's <em>first fruit set</em>, six days from now.</h1>
+    <div class="meta">May 6, 2025 · "heavier than '24" — captured 11:42 am</div>
+  </div>
+
+  <div class="frost">No frost expected. Nightly lows hold ≥ 8°C through Friday.</div>
+
+  <div class="wrap">
+    <div class="row-label">Weather</div>
+    <div class="weather">
+      <div>
+        <div class="label">Last rain</div>
+        <div class="val">8 mm</div>
+        <div class="sub">Apr 30 · 6 days ago</div>
+      </div>
+      <div>
+        <div class="label">Forecast</div>
+        <div class="val">12 mm</div>
+        <div class="sub">May 7 · in 2 days</div>
+      </div>
+    </div>
+
+    <div class="row-label">Quick capture</div>
+  </div>
+  <div class="qc-scroll">
+    <button class="qc primary">
+      <div class="em">＋</div>
+      <div>
+        <div class="name">New entry</div>
+        <div class="sub">Any plant</div>
+      </div>
+    </button>
+    <button class="qc">
+      <div class="em">🌳</div>
+      <div>
+        <div class="name">Apricot</div>
+        <div class="sub">Last: Apr 21</div>
+      </div>
+    </button>
+    <button class="qc">
+      <div class="em">🍅</div>
+      <div>
+        <div class="name">Sungold</div>
+        <div class="sub">Last: May 4</div>
+      </div>
+    </button>
+    <button class="qc">
+      <div class="em">🌿</div>
+      <div>
+        <div class="name">Basil</div>
+        <div class="sub">Last: Apr 30</div>
+      </div>
+    </button>
+    <button class="qc">
+      <div class="em">🫐</div>
+      <div>
+        <div class="name">Patriot</div>
+        <div class="sub">Last: Apr 18</div>
+      </div>
+    </button>
+  </div>
+
+  <div class="wrap">
+    <div class="row-label">Year ago</div>
+    <a href="plant.html" class="memory" style="text-decoration: none;">
+      <div>
+        <div class="yr display">'25</div>
+        <div class="day">May 6</div>
+      </div>
+      <div class="body">
+        <div class="title">Apricot — first fruit set</div>
+        <div class="desc">"Heavier than '24, second cluster looking generous on the south side"</div>
+      </div>
+    </a>
+    <div class="memory">
+      <div>
+        <div class="yr display">'25</div>
+        <div class="day">May 4</div>
+      </div>
+      <div class="body">
+        <div class="title">Tomato 'Sungold' — planted</div>
+        <div class="desc">Four seedlings into the bed, A1 and A2.</div>
+      </div>
+    </div>
+    <div class="memory">
+      <div>
+        <div class="yr display">'24</div>
+        <div class="day">May 8</div>
+      </div>
+      <div class="body">
+        <div class="title">Veg bed mulched</div>
+        <div class="desc">Three barrows of straw across the whole bed.</div>
+      </div>
+    </div>
+
+    <div class="row-label">On my list</div>
+    <div class="reminders">
+      <div class="reminder overdue">
+        <div class="title">Check apricot for peach-leaf-curl</div>
+        <div class="when">3d overdue</div>
+      </div>
+      <div class="reminder">
+        <div class="title">Side-dress tomatoes</div>
+        <div class="when">Tomorrow</div>
+      </div>
+      <div class="reminder">
+        <div class="title">Direct sow carrot succession</div>
+        <div class="when">+4 days</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <a class="active">Today</a>
+  <a>Plants</a>
+  <a>Beds</a>
+  <a href="plant.html">Journal</a>
+  <a>Plan</a>
+</nav>
+</body>
+</html>

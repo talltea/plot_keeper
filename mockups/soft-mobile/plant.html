@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apricot — Soft Mobile</title>
+<style>
+  :root {
+    --bg: #f4f6f3;
+    --card: #ffffff;
+    --text: #1c2620;
+    --text-2: #6b7770;
+    --text-3: #9ba49d;
+    --sage: #6ba368;
+    --sage-soft: #c8dec3;
+    --sage-bg: #e8f1e6;
+    --warn: #d97e3a;
+    --line: #e7ebe5;
+    --shadow: 0 1px 3px rgba(20, 30, 25, 0.04), 0 4px 12px rgba(20, 30, 25, 0.04);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "SF Pro Text", "Inter", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+  .phone {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 20px 16px 100px;
+  }
+  .back {
+    color: var(--sage);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+  .hero {
+    background: linear-gradient(180deg, #f0f7ec, #ffffff);
+    border-radius: 22px;
+    padding: 22px 18px 18px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .hero .em-big { font-size: 44px; line-height: 1; margin-bottom: 8px; }
+  .hero h1 {
+    font-size: 28px;
+    margin: 0 0 2px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .hero .sci { font-size: 14px; color: var(--text-2); font-style: italic; margin-bottom: 10px; }
+  .hero .meta-row { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-2); }
+  .hero .meta-row b { color: var(--text); font-weight: 600; }
+
+  .quick-strip {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .quick-strip .pill {
+    background: var(--card);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    flex: 1;
+    text-align: center;
+  }
+  .quick-strip .pill.primary {
+    background: var(--sage);
+    color: white;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+  }
+  .card h2 {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+    color: var(--text-3);
+    margin: 0 0 12px;
+  }
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    background: var(--bg);
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-2);
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  .tab.active {
+    background: var(--card);
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(20,30,25,0.06);
+  }
+  /* Phenology — visual rows */
+  .pheno-year {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pheno-year:last-child { border-bottom: none; }
+  .pheno-year .yr {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    width: 42px;
+    flex-shrink: 0;
+  }
+  .pheno-year.this .yr { color: var(--sage); }
+  .pheno-year .events {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .pe {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 3px 7px;
+    font-size: 11px;
+    color: var(--text);
+  }
+  .pe .lbl { color: var(--text-3); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+  .pe .date { font-weight: 600; font-feature-settings: "tnum"; }
+  .pe.bud { background: #ece4f5; }
+  .pe.bloom { background: #fce8ee; }
+  .pe.fruit_set { background: #fff0d6; }
+  .pe.harvest { background: #e8f1e6; }
+  .pe.empty { color: var(--text-3); font-style: italic; padding: 3px 7px; background: transparent; border: 1px dashed var(--line); }
+  .delta-pill {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--warn);
+    margin-left: 4px;
+    background: var(--card);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  /* Events list */
+  .event {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .event:last-child { border-bottom: none; padding-bottom: 0; }
+  .event:first-of-type { padding-top: 0; }
+  .event .icon {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+  .event .icon.bloom { background: #fce8ee; }
+  .event .icon.bud { background: #ece4f5; }
+  .event .icon.harvest { background: var(--sage-bg); }
+  .event .icon.pest { background: #fde2d8; }
+  .event .icon.prune { background: #fff0d6; }
+  .event .body { flex: 1; }
+  .event .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 3px;
+  }
+  .event .title { font-size: 14px; font-weight: 600; text-transform: capitalize; }
+  .event .when { font-size: 11px; color: var(--text-3); font-feature-settings: "tnum"; }
+  .event .desc { font-size: 13px; color: var(--text-2); }
+
+  .fab {
+    position: fixed;
+    bottom: 90px;
+    right: 50%;
+    transform: translateX(196px);
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--sage);
+    color: white;
+    font-size: 28px;
+    border: none;
+    box-shadow: 0 6px 16px rgba(107, 163, 104, 0.35);
+    cursor: pointer;
+  }
+  @media (max-width: 420px) {
+    .fab { right: 18px; transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <a href="home.html" class="back">← Today</a>
+
+  <div class="hero">
+    <div class="em-big">🌳</div>
+    <h1>Apricot</h1>
+    <div class="sci">Prunus armeniaca</div>
+    <div class="meta-row">
+      <span><b>Individual</b> specimen</span>
+      <span>Planted <b>Mar 2022</b></span>
+      <span>Front yard, south fence</span>
+    </div>
+  </div>
+
+  <div class="quick-strip">
+    <button class="pill primary">+ Log event</button>
+    <button class="pill">📷 Photo</button>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active">Timeline</div>
+      <div class="tab">Phenology</div>
+      <div class="tab">Pests</div>
+      <div class="tab">Photos</div>
+    </div>
+
+    <h2>Phenology · 4 years</h2>
+    <div class="pheno-year this">
+      <div class="yr">2026</div>
+      <div class="events">
+        <div class="pe bud"><span class="lbl">bud</span><span class="date">Apr 12</span></div>
+        <div class="pe bloom"><span class="lbl">bloom</span><span class="date">Apr 21</span><span class="delta-pill">+2d</span></div>
+        <div class="pe empty">fruit set —</div>
+        <div class="pe empty">harvest —</div>
+      </div>
+    </div>
+    <div class="pheno-year">
+      <div class="yr">2025</div>
+      <div class="events">
+        <div class="pe bud"><span class="lbl">bud</span><span class="date">Apr 9</span></div>
+        <div class="pe bloom"><span class="lbl">bloom</span><span class="date">Apr 19</span></div>
+        <div class="pe fruit_set"><span class="lbl">set</span><span class="date">May 6</span></div>
+        <div class="pe harvest"><span class="lbl">harvest</span><span class="date">Jul 12</span></div>
+      </div>
+    </div>
+    <div class="pheno-year">
+      <div class="yr">2024</div>
+      <div class="events">
+        <div class="pe bud"><span class="lbl">bud</span><span class="date">Apr 13</span></div>
+        <div class="pe bloom"><span class="lbl">bloom</span><span class="date">Apr 22</span></div>
+        <div class="pe fruit_set"><span class="lbl">set</span><span class="date">May 9</span></div>
+        <div class="pe harvest"><span class="lbl">harvest</span><span class="date">Jul 15</span></div>
+      </div>
+    </div>
+    <div class="pheno-year">
+      <div class="yr">2023</div>
+      <div class="events">
+        <div class="pe bud"><span class="lbl">bud</span><span class="date">Apr 5</span></div>
+        <div class="pe bloom"><span class="lbl">bloom</span><span class="date">Apr 15</span></div>
+        <div class="pe fruit_set"><span class="lbl">set</span><span class="date">Apr 30</span></div>
+        <div class="pe harvest"><span class="lbl">harvest</span><span class="date">Jul 8</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Recent events</h2>
+    <div class="event">
+      <div class="icon bloom">🌸</div>
+      <div class="body">
+        <div class="head">
+          <div class="title">Bloom</div>
+          <div class="when">Apr 21</div>
+        </div>
+        <div class="desc">Full bloom — about 70% open. Bees thick this year.</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="icon bud">🌿</div>
+      <div class="body">
+        <div class="head">
+          <div class="title">Bud</div>
+          <div class="when">Apr 12</div>
+        </div>
+        <div class="desc">Pink bud stage. Two days behind last year.</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="icon prune">✂️</div>
+      <div class="body">
+        <div class="head">
+          <div class="title">Prune</div>
+          <div class="when">Mar 28</div>
+        </div>
+        <div class="desc">Light dormant prune — three crossing branches off.</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="icon harvest">🍑</div>
+      <div class="body">
+        <div class="head">
+          <div class="title">Harvest</div>
+          <div class="when">Jul 12, 2025</div>
+        </div>
+        <div class="desc">~14 kg. Heavier than '24. Made jam (8 jars), dried 2 trays.</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="icon pest">🐛</div>
+      <div class="body">
+        <div class="head">
+          <div class="title">Pest · Aphids</div>
+          <div class="when">May 30, 2025</div>
+        </div>
+        <div class="desc">Moderate pressure on new growth. Sprayed soap; cleared in a week.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="fab">+</button>
+</body>
+</html>

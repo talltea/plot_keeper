@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plot Keeper — Almanac</title>
+<style>
+  :root {
+    --bg: #f4f3ee;
+    --paper: #fbfaf5;
+    --ink: #1a1a1a;
+    --ink-2: #4a4a44;
+    --ink-3: #8b8b82;
+    --rule: #c9c5b6;
+    --rule-2: #e0ddcf;
+    --olive: #6b8e23;
+    --rust: #a04a28;
+    --maroon: #6b2c2c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "ui-monospace", "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .serif {
+    font-family: "Iowan Old Style", "Charter", Georgia, serif;
+  }
+  .phone {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--paper);
+    padding: 0 0 70px;
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+  }
+
+  /* Masthead — almanac style */
+  .mast {
+    text-align: center;
+    padding: 14px 12px 10px;
+    border-bottom: 3px double var(--ink);
+  }
+  .mast .title {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+  }
+  .mast .sub {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--ink-2);
+    margin-top: 2px;
+  }
+  .mast .date-bar {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--ink-2);
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+  }
+  .mast .date-bar b { color: var(--ink); }
+
+  /* Section headers */
+  h2 {
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 6px 12px 4px;
+    border-bottom: 1px solid var(--ink);
+    background: var(--bg);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  h2 .right {
+    float: right;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  section { margin-bottom: 10px; }
+  .body { padding: 8px 12px; }
+
+  /* Frost row */
+  .frost-row {
+    background: var(--paper);
+    border-top: 1px solid var(--rule-2);
+    border-bottom: 1px solid var(--rule-2);
+    padding: 6px 12px;
+    font-size: 11px;
+    color: var(--ink-2);
+    display: flex;
+    justify-content: space-between;
+  }
+  .frost-row b { color: var(--olive); }
+
+  /* Weather table */
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    font-feature-settings: "tnum";
+  }
+  table.data td, table.data th {
+    padding: 4px 12px;
+    border-bottom: 1px dotted var(--rule);
+    text-align: left;
+    vertical-align: top;
+  }
+  table.data th {
+    background: var(--bg);
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--ink-3);
+    border-bottom: 1px solid var(--ink);
+  }
+  table.data td.num { text-align: right; font-feature-settings: "tnum"; }
+  table.data tr:last-child td { border-bottom: none; }
+
+  /* Quick capture grid */
+  .qc {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+  }
+  .qc button {
+    border: none;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    padding: 12px;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .qc button:nth-child(2n) { border-right: none; }
+  .qc button:hover { background: var(--bg); }
+  .qc .em { font-size: 18px; }
+  .qc .name { font-family: "Iowan Old Style", Georgia, serif; font-weight: 600; }
+  .qc .meta { font-size: 9px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 1px; }
+  .qc .new {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .qc .new .meta { color: rgba(251,250,245,0.6); }
+
+  /* Memory column */
+  .memory {
+    padding: 8px 12px;
+    border-bottom: 1px dotted var(--rule);
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .memory:last-child { border-bottom: none; }
+  .memory .when {
+    font-feature-settings: "tnum";
+    color: var(--ink-3);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .memory .when b { color: var(--rust); display: block; font-size: 14px; font-family: "Iowan Old Style", Georgia, serif; letter-spacing: 0; }
+  .memory .what b { font-weight: 600; }
+
+  /* Reminders */
+  .reminder {
+    padding: 7px 12px;
+    border-bottom: 1px dotted var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+  .reminder:last-child { border-bottom: none; }
+  .reminder .badge {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-3);
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+  .reminder.overdue .badge {
+    color: var(--rust);
+    font-weight: 600;
+  }
+  .reminder.overdue { background: rgba(160, 74, 40, 0.05); }
+
+  /* Footer ribbon */
+  .colophon {
+    text-align: center;
+    font-size: 9px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 12px;
+    border-top: 1px solid var(--rule);
+    margin-top: 12px;
+  }
+
+  /* Bottom nav */
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--paper);
+    border-top: 2px solid var(--ink);
+    max-width: 420px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .nav a {
+    text-align: center;
+    padding: 10px 4px 14px;
+    font-family: "Iowan Old Style", Georgia, serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-2);
+    text-decoration: none;
+    border-right: 1px solid var(--rule);
+  }
+  .nav a:last-child { border-right: none; }
+  .nav a.active { background: var(--ink); color: var(--paper); }
+</style>
+</head>
+<body>
+<div class="phone">
+  <header class="mast">
+    <div class="title serif">PLOT KEEPER ALMANAC</div>
+    <div class="sub">a record of one small garden</div>
+    <div class="date-bar">
+      <span>Tue · <b>5 May 2026</b></span>
+      <span>Day <b>125</b> of 365</span>
+      <span>Wk <b>19</b></span>
+    </div>
+  </header>
+
+  <div class="frost-row">
+    <span><b>FROST:</b> none expected · Fri low 8°C</span>
+    <span>Sunset <b>8:14p</b></span>
+  </div>
+
+  <section>
+    <h2>Rainfall <span class="right">past 14 · next 10</span></h2>
+    <table class="data">
+      <tr><th>When</th><th>Status</th><th class="num">mm</th></tr>
+      <tr><td>Apr 30</td><td>last rain · 6 d ago</td><td class="num">8.0</td></tr>
+      <tr><td>Apr 22</td><td>recorded</td><td class="num">3.5</td></tr>
+      <tr><td>May 7</td><td><b>forecast · in 2 d</b></td><td class="num">12.0</td></tr>
+      <tr><td>May 12</td><td>forecast</td><td class="num">2.5</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Quick capture</h2>
+    <div class="qc">
+      <button class="new">
+        <div>
+          <div class="name">+ NEW ENTRY</div>
+          <div class="meta">any plant · any zone</div>
+        </div>
+        <div class="em">＋</div>
+      </button>
+      <button>
+        <div>
+          <div class="name">Apricot</div>
+          <div class="meta">Last: Apr 21 · bloom</div>
+        </div>
+        <div class="em">🌳</div>
+      </button>
+      <button>
+        <div>
+          <div class="name">Sungold</div>
+          <div class="meta">Last: May 4 · planted</div>
+        </div>
+        <div class="em">🍅</div>
+      </button>
+      <button>
+        <div>
+          <div class="name">Basil</div>
+          <div class="meta">Last: Apr 30</div>
+        </div>
+        <div class="em">🌿</div>
+      </button>
+      <button>
+        <div>
+          <div class="name">Patriot</div>
+          <div class="meta">Last: Apr 18 · bloom</div>
+        </div>
+        <div class="em">🫐</div>
+      </button>
+      <button>
+        <div>
+          <div class="name">Carrots</div>
+          <div class="meta">Last: Apr 22 · sown</div>
+        </div>
+        <div class="em">🥕</div>
+      </button>
+    </div>
+  </section>
+
+  <section>
+    <h2>One year ago today <span class="right">±5 d</span></h2>
+    <a href="plant.html" class="memory" style="text-decoration: none; color: inherit;">
+      <div class="when">May 6<b>'25</b></div>
+      <div class="what"><b>APRICOT</b> — first fruit set noted. <em>"heavier than '24"</em></div>
+    </a>
+    <div class="memory">
+      <div class="when">May 4<b>'25</b></div>
+      <div class="what"><b>SUNGOLD</b> — 4 seedlings planted, A1–A2.</div>
+    </div>
+    <div class="memory">
+      <div class="when">May 8<b>'24</b></div>
+      <div class="what"><b>VEG BED</b> — mulched, 3 barrows straw.</div>
+    </div>
+    <div class="memory">
+      <div class="when">May 3<b>'24</b></div>
+      <div class="what"><b>BASIL</b> — sown, 6 cells (B3, B4).</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>List <span class="right">3 active</span></h2>
+    <div class="reminder overdue">
+      <div>Check apricot for peach-leaf-curl</div>
+      <div class="badge">3D OVERDUE</div>
+    </div>
+    <div class="reminder">
+      <div>Side-dress tomatoes (compost tea)</div>
+      <div class="badge">+1D · ANNUAL</div>
+    </div>
+    <div class="reminder">
+      <div>Direct sow carrot succession #2</div>
+      <div class="badge">+4D</div>
+    </div>
+  </section>
+
+  <div class="colophon">est. 2022 · single garden · single keeper</div>
+</div>
+
+<nav class="nav">
+  <a class="active">Today</a>
+  <a>Plants</a>
+  <a>Beds</a>
+  <a href="plant.html">Journal</a>
+  <a>Plan</a>
+</nav>
+</body>
+</html>
