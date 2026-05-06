@@ -48,7 +48,7 @@ Phone (installed PWA, Safari)  ──Tailscale (HTTPS)──▶  Laptop server
                                                        └─ photos/ on disk
 ```
 
-- **Backend**: Python 3.12+ / Flask / SQLite. Plain `sqlite3` is enough for
+- **Backend**: Python 3.11+ / Flask / SQLite. Plain `sqlite3` is enough for
   v1; revisit if migrations get complex. Photos as files on disk, served via
   Flask's `send_from_directory`. Migrations via `meta.schema_version` +
   numbered SQL files. Dev: `flask run`; production (under launchd): `waitress`.
@@ -399,7 +399,7 @@ Rain tracking: same daily poll fetches recent observed precipitation
 plot_keeper/
 ├── DESIGN.md                      # this file
 ├── backend/
-│   ├── pyproject.toml             # uv-managed; flask, waitress, httpx, pillow,
+│   ├── requirements.txt           # flask, waitress, httpx, pillow,
 │   │                              # pywebpush, argon2-cffi
 │   ├── app.py                     # Flask app factory + blueprint registration
 │   ├── db.py                      # sqlite3 connection, migrations
@@ -451,9 +451,9 @@ plot_keeper/
 
 End-to-end smoke (re-run after each relevant phase):
 
-1. `uv run flask --app app run --port 8765` on the laptop; hit
-   `http://localhost:8765`.
-2. `tailscale serve https / http://127.0.0.1:8765`; phone Safari opens via
+1. `flask --app app run --port 5757` on the laptop; hit
+   `http://localhost:5757`.
+2. `tailscale serve https / http://127.0.0.1:5757`; phone Safari opens via
    tailnet, lands on `/login`, owner password lets through; "Add to Home
    Screen" → installs as PWA. Open in a private window with the viewer
    password → write buttons hidden / disabled. Owner revokes the viewer

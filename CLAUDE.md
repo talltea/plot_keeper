@@ -5,13 +5,13 @@ a working document and conflicts/updates land there as decisions are made.
 
 ## Status
 
-Pre-implementation. The repo currently contains only design.
+Phase 0 complete (scaffold). See `IMPLEMENTATION_PLAN.md` for what's next.
 
 ## Stack
 
-- **Backend:** Flask + plain `sqlite3`. Production via `waitress` under
-  launchd; dev via `flask run`. SQLAlchemy/Alembic only if migrations
-  get hairy.
+- **Backend:** Flask + plain `sqlite3`. Python 3.11+. Deps via
+  `pip` + `venv` (no uv). Production via `waitress` under launchd; dev
+  via `flask run`. SQLAlchemy/Alembic only if migrations get hairy.
 - **Frontend:** Vite + Svelte PWA. Read-only offline; writes gated on
   laptop reachability. Write queue is a deferred enhancement.
 - **Transport:** Tailscale serve from laptop. Tailscale is *transport*,
@@ -66,6 +66,50 @@ Pre-implementation. The repo currently contains only design.
 
 (Nothing pending from the design conversation as of last check-in.)
 
+## Quickstart
+
+First-time setup:
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -r backend/requirements.txt
+(cd frontend && npm install)
+```
+
+Run dev (single command, single port):
+
+```sh
+./scripts/dev.sh
+```
+
+Open http://localhost:5757 . Flask serves on :5757; Vite watches the
+frontend sources and rebuilds `backend/static/` on every save. Ctrl-C
+stops both. Backend changes auto-reload via `flask --debug`; frontend
+changes need a manual browser refresh after Vite rebuilds.
+
+Tests:
+
+```sh
+.venv/bin/pytest                 # backend smoke
+(cd frontend && npm run check)   # svelte/ts type-check
+./scripts/verify_phase0.sh       # live-server smoke
+```
+
+## Layout
+
+- `backend/app.py` — Flask factory, routes are added here until phase 1
+  splits them into `backend/blueprints/`.
+- `backend/db.py` — sqlite3 connection helper + numbered-migration runner.
+- `backend/migrations/000N_*.sql` — schema migrations, applied in order
+  on startup. The runner records the applied version in `meta.schema_version`.
+- `frontend/src/` — Svelte 5 + TS. `app.css` holds the field-notebook
+  theme (paper background, fonts, ink/sage/rust/gilt palette).
+- `data/` (gitignored) — `plotkeeper.db`, `photos/`, `backups/`.
+
 ## Conventions
 
-(To be filled in once code exists.)
+- Svelte uses runes (`$state`, `$derived`, `$effect`). No legacy reactive
+  `let` / `$:` syntax.
+- Backend routes return JSON dicts; Flask handles serialization.
+- Migrations are append-only; never edit a numbered file after it's been
+  applied to a real DB.

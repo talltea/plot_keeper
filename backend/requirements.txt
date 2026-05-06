@@ -1,0 +1,4 @@
+flask>=3.0
+
+# dev / test
+pytest>=8.0

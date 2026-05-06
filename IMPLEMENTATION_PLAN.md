@@ -66,7 +66,7 @@ real before adding more features.
 - Cookie session, HttpOnly + Secure + SameSite=Lax, 90-day TTL.
   `session(id, role='owner', device_label, created_at, last_seen_at)`.
 - `/login` route, rate-limit 10/min/IP.
-- Bind to `127.0.0.1`. `tailscale serve https / http://127.0.0.1:8765`
+- Bind to `127.0.0.1`. `tailscale serve https / http://127.0.0.1:5757`
   + a launchd plist that runs `waitress` on login.
 - Minimal PWA manifest + apple-touch-icon so "Add to Home Screen" looks
   right on iOS. **No service worker yet** — keep it online-only.
